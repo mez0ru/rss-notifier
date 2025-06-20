@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require './.env' if File.exist?(".env.rb")
+
 dev = ENV['RACK_ENV'] == 'development'
 
 if dev
@@ -8,6 +12,13 @@ end
 require 'rack/unreloader'
 Unreloader = Rack::Unreloader.new(subclasses: %w'Roda Sequel::Model', logger: logger, reload: dev, autoload: dev){App}
 require_relative 'models'
+
+require 'httpx'
+require 'nokolexbor'
+require 'zlib'
+
+Unreloader.require 'services'
+
 Unreloader.require('app.rb'){'App'}
 run(dev ? Unreloader : App.freeze.app)
 

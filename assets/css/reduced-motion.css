@@ -1,0 +1,23 @@
+@media (prefers-reduced-motion: reduce) {
+    /* Target the exact same selectors as the UI library */
+    :not([aria-busy=true]), :not([aria-busy=true])::after, :not([aria-busy=true])::before {
+        /* Revert animation/transition properties to their initial/default states.
+           Since the library uses !important, you'll likely need !important as well. */
+        animation-duration: initial !important;
+        animation-delay: initial !important;
+        animation-iteration-count: initial !important; /* or infinite */
+        scroll-behavior: initial !important; /* or smooth */
+        transition-delay: initial !important;
+        transition-duration: initial !important;
+        background-attachment: initial !important; /* Assuming you want to revert this too */
+    }
+
+    /* Important Note:
+       If the UI library had more specific selectors within this media query,
+       you would need to match or exceed their specificity.
+       For example, if they had `.ui-component :not([aria-busy=true])`,
+       you might need `.your-wrapper .ui-component :not([aria-busy=true])`
+       or just `.ui-component :not([aria-busy=true])` with !important.
+    */
+}
+

@@ -20,13 +20,22 @@ class App < Roda
     csp.default_src :none
     csp.style_src :self, 'https://cdn.jsdelivr.net'
     csp.form_action :self
-    csp.script_src :self
+    csp.script_src :self, :'unsafe-inline'
     csp.connect_src :self
     csp.base_uri :none
+    csp.img_src :self, 'https://img.youtube.com'
     csp.frame_ancestors :none
+    csp.connect_src :self, 'ws:'
   end
 
-  css_opts = {:cache=>false, :style=>:compressed}
+  css_opts = {
+    load_paths: [
+      File.expand_path('./assets/sass')
+    ],
+    cache: false,
+    style: :expanded
+    # style: :compressed #prod
+  }
   # :nocov:
   if ENV['RACK_ENV'] == 'development'
     css_opts.merge!(:source_map_embed=>true, source_map_contents: true, source_map_file: ".")
@@ -36,7 +45,12 @@ class App < Roda
 
   plugin :route_csrf
   plugin :flash
-  plugin :assets, css: 'app.scss', css_opts: css_opts, timestamp_paths: true
+  plugin :assets, css: [
+    'pico-deprecated/pico.min.css',
+    'pico-deprecated/pico.colors.min.css',
+    'reduced-motion.css',
+    'app.scss',
+  ], css_opts: css_opts, timestamp_paths: true
   plugin :render, escape: true, layout: './layout', :assume_fixed_locals=>true, :template_opts=>{chain_appends: !defined?(SimpleCov), freeze: true, skip_compiled_encoding_detection: true, scope_class: self, default_fixed_locals: '()', extract_fixed_locals: true}
   plugin :public
   plugin :Integer_matcher_max
@@ -105,6 +119,8 @@ class App < Roda
     r.hash_branches('')
 
     r.root do
+      # FeedService.new.call
+      @feeds = Feed.all
       view 'index'
     end
   end

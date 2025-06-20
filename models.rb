@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative 'db'
 require 'sequel/model'
 
@@ -8,6 +9,7 @@ end
 
 Sequel::Model.plugin :auto_validations
 Sequel::Model.plugin :require_valid_schema
+Sequel::Model.plugin :timestamps
 Sequel::Model.plugin :subclasses unless ENV['RACK_ENV'] == 'development'
 
 unless defined?(Unreloader)

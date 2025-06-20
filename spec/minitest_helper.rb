@@ -4,6 +4,14 @@ gem 'minitest'
 require 'minitest/global_expectations/autorun'
 require 'minitest/hooks/default'
 
+require 'httpx'
+require 'nokolexbor'
+require 'zlib'
+# Dir['../services/*.rb'].each{|f| puts f.inspect}
+require_relative '../services/feed'
+require_relative '../services/command'
+
+
 class Minitest::HooksSpec
   around(:all) do |&block|
     DB.transaction(rollback: :always){super(&block)}
@@ -20,6 +28,7 @@ class Minitest::HooksSpec
     LOGGER.level = Logger::FATAL
   end
 end
+
 
 freeze_core = false # change to true to enable refrigerator
 if freeze_core

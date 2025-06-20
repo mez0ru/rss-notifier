@@ -50,10 +50,16 @@ end
 irb = proc do |env|
   trap('INT', "IGNORE")
   dir, base = File.split(FileUtils::RUBY)
-  cmd = if base.sub!(/\Aruby/, 'irb')
-    [File.join(dir, base)]
+  windows = Gem.win_platform?
+  if windows
+    cmd = base.sub!(/\Aruby.exe/, 'irb.bat')
+      [File.join(dir, base)]
   else
-    [FileUtils::RUBY, "-S", "irb"]
+    cmd = if base.sub!(/\Aruby/, 'irb')
+      [File.join(dir, base)]
+    else
+      [FileUtils::RUBY, "-S", "irb"]
+    end
   end
   cmd.unshift({"RACK_ENV" => env})
   cmd << "-r" << "./models"
@@ -90,6 +96,7 @@ spec = proc do |type|
 end
 spec.call('model')
 spec.call('web')
+spec.call('service')
 
 desc "Run all specs"
 task default: [:model_spec, :web_spec]

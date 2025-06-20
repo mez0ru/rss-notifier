@@ -1,1 +1,23 @@
-<h1>Hello World!</h1>
+<div class="main-head">
+  <h1>RSS Notifier</h1>
+  <button class="fit-btn">Add Feed</button>
+</div>
+
+<div class="feeds">
+<% @feeds&.each do |feed| %>
+<article class="feed">
+  <a href="<%= feed.link %>" target="_blank" rel="noopener noreferrer">
+    <img class="preview" src="https://img.youtube.com/vi/0gNadOF0iHA/hqdefault.jpg" alt="Moona Hoshinova">
+    <p class="header"><%= feed.name %></p>
+    <p class="footer">【Don't Starve Together】another adventure of MoonKae!【hololive】</p>
+  </a>
+</article>
+<% end %>
+</div>
+
+<form method="post" action="/users">
+  <%== csrf_tag('/users') %>
+  <input type="text" name="first_name" required>
+  <input type="text" name="last_name" required>
+  <button type="submit">Submit</button>
+</form>

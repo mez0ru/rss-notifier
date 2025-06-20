@@ -4,7 +4,7 @@ ENV["RACK_ENV"] = "test"
 require_relative '../../app'
 Tilt.finalize!
 
-raise "test database doesn't end with test" if DB.opts[:database] && !DB.opts[:database].end_with?('test')
+raise "test database doesn't end with test" if DB.opts[:database] && !DB.opts[:database].end_with?('test.sqlite')
 
 require 'capybara'
 require 'capybara/dsl'

@@ -1,3 +1,5 @@
 /.env.rb
 /test-stack
 /coverage
+/.env.rb.enc.key
+/database*.sqlite

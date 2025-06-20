@@ -1,3 +1,4 @@
 # frozen_string_literal: true
-class Model1 < Sequel::Model
+
+class Condition < Sequel::Model
 end
