@@ -44,6 +44,8 @@ GEM
       minitest (> 5)
     minitest-hooks (1.5.2)
       minitest (> 5.3)
+    mocha (2.7.1)
+      ruby2_keywords (>= 0.0.5)
     nio4r (2.7.4)
     nokogiri (1.18.8-x64-mingw-ucrt)
       racc (~> 1.4)
@@ -63,6 +65,7 @@ GEM
     regexp_parser (2.10.0)
     roda (3.92.0)
       rack
+    ruby2_keywords (0.0.5)
     sassc (2.4.0)
       ffi (~> 1.9)
     sequel (5.93.0)
@@ -92,6 +95,7 @@ DEPENDENCIES
   minitest (>= 5.7.0)
   minitest-global_expectations
   minitest-hooks (>= 1.1.0)
+  mocha (~> 2.7)
   nokolexbor (~> 0.6.1)
   puma
   rack-livereload

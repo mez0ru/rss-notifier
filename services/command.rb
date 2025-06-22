@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open3'
 require 'logger'
 
@@ -14,8 +16,6 @@ class CommandService
     @command = command
     @logger = logger
     @is_running = false
-
-    Thread.abort_on_exception = true
   end
 
   def running?
@@ -45,6 +45,7 @@ class CommandService
 
     @queued = []
   end
+
 
   private
 

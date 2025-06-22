@@ -5,8 +5,33 @@ require 'logger'
 
 describe FeedService do
   it 'Feed service should work' do
-    feed_service = FeedService.new logger: Logger.new($stdout)
+
+    comm = mock()
+    comm.expects(:queued).returns([]).at_least_once
+    comm.expects(:running).returns([]).at_least_once
+    comm.expects(:start).returns(true).at_least_once
+
+    links_array = Feed.select(:link).map(&:link)
+
+    mock_responses = [
+      stub(error: nil, body: stub(to_s: File.read("#{__dir__}/feed_httpx_mocks/channel1.xml"))),
+      stub(error: nil, body: stub(to_s: File.read("#{__dir__}/feed_httpx_mocks/channel2.xml"))),
+
+      # Error response for error_page
+      # stub(error: StandardError.new("Simulated network error"), body: stub(to_s: "")) # Body can be empty or nil on error
+    ]
+
+    HTTPX.stubs(:get).with(*links_array).returns(mock_responses.to_enum)
+
+    feed_service = FeedService.new(Logger.new($stdout), comm)
     feed_service.check_all
+
+    # # Now, when you call your code, it will use the mocked HTTPX.get
+    # HTTPX.get(*links_array).each.with_index do |res, i|
+    #   # Here, 'res' will be one of your 'stub' objects
+    #   methodx(res.body.to_s, i)
+    # end
+
     refute_nil(feed_service.queued, 'Queued feeds are nil...')
     refute_empty(feed_service.queued, 'There should be queued feeds, but there\'s none...')
 

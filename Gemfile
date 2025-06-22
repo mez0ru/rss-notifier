@@ -32,3 +32,5 @@ gem "httpx", "~> 1.5"
 
 
 gem "nokolexbor", "~> 0.6.1"
+
+gem "mocha", "~> 2.7"

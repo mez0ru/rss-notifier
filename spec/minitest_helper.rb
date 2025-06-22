@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
 gem 'minitest'
+gem 'mocha'
 require 'minitest/global_expectations/autorun'
 require 'minitest/hooks/default'
+require 'minitest/autorun'
+require 'mocha/minitest'
 
 require 'httpx'
 require 'nokolexbor'

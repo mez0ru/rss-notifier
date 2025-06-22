@@ -4,14 +4,15 @@
 FeedInfo = Struct.new('Feed', :thumbnail, :url, :name, :title, :published, :is_published, :feed_id)
 
 class FeedService
-  attr_accessor :queued, :latest, :last_checked_on, :duration, :thread, :logger
+  attr_accessor :queued, :latest, :last_checked_on, :duration, :thread, :logger, :command_service
 
-  def initialize(logger, duration = 60 * 15)
+  def initialize(logger, command_service, duration = 60 * 15)
     @queued = []
     @latest = []
     @last_checked_on = nil
     @logger = logger
     @duration = duration
+    @command_service = command_service
     Thread.abort_on_exception = true
 
     # start_timer
@@ -42,7 +43,7 @@ class FeedService
   private
 
   def log(level, message)
-    @logger.add(level, message)
+    @logger.send(level, message)
     Log.create(message: message, level: level)
   end
 
@@ -88,7 +89,12 @@ class FeedService
           is_published: node.at_xpath('.//*[name()=\'media:statistics\']/@views')&.text.to_i&.positive? || false,
           feed_id: feed.id
         )
+
+        log('info', "Added to queue \"#{url}\".")
       end
     end
+
+    @command_service.queued.concat(@queued - @command_service.running)
+    @command_service.start
   end
 end
